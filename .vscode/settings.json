@@ -1,0 +1,7 @@
+{
+  "search.exclude": {
+    "vendor": true,
+    "web/assets/**/*": true,
+    "runtime": true
+  }
+}
