@@ -28,10 +28,13 @@ $this->registerJsFile(
     ['type' => 'module'],
 );
 
+if (!isset($selectedAuthors)) $selectedAuthors = null;
+if (!isset($selectedShops)) $selectedShops = null;
+
 $selectedAuthorsJson = null;
 $selectedShopsJson = null;
 
-if ($selectedAuthors) {
+if (isset($selectedAuthors) && $selectedAuthors) {
     $selectedAuthorsJson = array_map(
         function ($item) {
             return ['id' => $item->id, 'title' => $item->title];
@@ -56,7 +59,10 @@ if ($selectedShops) {
         window.__autocompleteAuthors = <?= Json::encode($selectedAuthorsJson) ?>;
         window.__autocompleteShops = <?= Json::encode($selectedShopsJson) ?>;
     </script>
-    <form method="POST" action="<?= Html::encode(Url::toRoute(['book/create'])); ?>">
+    <form
+        method="POST"
+        action="<?= Html::encode(Url::toRoute($model ? ['book/edit', 'id' => $model->id] : ['book/create'])); ?>"
+    >
         <input type="hidden" name="<?=Yii::$app->request->csrfParam?>" value="<?=Yii::$app->request->getCsrfToken()?>">
         <div>
             <div>Title:</div>

@@ -61,7 +61,7 @@ class Book extends \yii\db\ActiveRecord
         return $this->hasMany(Shop::class, ['id' => 'shop_id'])->viaTable('book_shop', ['book_id' => 'id']);
     }
 
-    public function addAuthorsAndShops($authorIds, $shopIds): bool
+    public function replaceAuthorsAndShops($authorIds, $shopIds): bool
     {
         $db = Yii::$app->db;
 
@@ -105,7 +105,14 @@ class Book extends \yii\db\ActiveRecord
             return $acc;
         }, [[], 0])[0];
 
-        $command = $db->createCommand($authorQuery . $shopQuery);
+        $query = <<<SQL
+            DELETE FROM book_author WHERE book_id = :bookId;
+            DELETE FROM book_shop WHERE book_id = :bookId;
+            {$authorQuery}
+            {$shopQuery}
+        SQL;
+
+        $command = $db->createCommand($query);
 
         $command->bindValue('bookId', $this->id);
         $command->bindValues($authorValues);
