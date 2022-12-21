@@ -51,6 +51,16 @@ class Book extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getAuthors()
+    {
+        return $this->hasMany(Author::class, ['id' => 'author_id'])->viaTable('book_author', ['book_id' => 'id']);
+    }
+
+    public function getShops()
+    {
+        return $this->hasMany(Shop::class, ['id' => 'shop_id'])->viaTable('book_shop', ['book_id' => 'id']);
+    }
+
     public function addAuthorsAndShops($authorIds, $shopIds): bool
     {
         $db = Yii::$app->db;

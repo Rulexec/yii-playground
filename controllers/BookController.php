@@ -6,6 +6,7 @@ use app\models\Book;
 use Yii;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class BookController extends Controller
@@ -18,6 +19,24 @@ class BookController extends Controller
 
         return $this->render('list', [
             'items' => $items,
+        ]);
+    }
+
+    public function actionView()
+    {
+        $request = Yii::$app->request;
+        $id = intval($request->get('id'));
+
+        $model = $id ? Book::findOne($id) : null;
+
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+            'shops' => $model->getShops()->all(),
+            'authors' => $model->getAuthors()->all(),
         ]);
     }
 
