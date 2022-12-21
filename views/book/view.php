@@ -7,6 +7,11 @@ use yii\helpers\Url;
 /** @var app\models\Book $model */
 /** @var app\models\Author[] $authors */
 
+$request = Yii::$app->request;
+$csrf = <<<CSRF
+    <input type="hidden" name="{$request->csrfParam}" value="{$request->getCsrfToken()}">
+CSRF;
+
 $encodedBookName = Html::encode($model->title);
 $this->title = "Book \"{$encodedBookName}\"";
 
@@ -35,4 +40,16 @@ $this->title = "Book \"{$encodedBookName}\"";
     <?php } else { ?>
         <div>No shops selling this book :(</div>
     <?php } ?>
+
+    <div>
+        <form
+            method="POST"
+            action="<?= Html::encode(Url::toRoute(['book/delete', 'retPath' => Html::encode(Url::toRoute(['book/list']))])); ?>"
+            style="display: inline-block"
+        >
+            <?= $csrf ?>
+            <input type="hidden" name="id" value="<?= Html::encode($model->id) ?>">
+            <button type="submit">delete</button>
+        </form>
+    </div>
 </div>
