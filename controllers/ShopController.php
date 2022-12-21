@@ -11,7 +11,7 @@ use yii\web\Response;
 
 class ShopController extends Controller
 {
-    public $layout = 'plain';
+    public $layout = 'books_store';
 
     public function actionList()
     {

@@ -21,6 +21,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </head>
 <body>
 <?php $this->beginBody() ?>
+<div>
+    <?= Html::a('books', ['book/list']); ?>
+    <?= Html::a('authors', ['author/list']); ?>
+    <?= Html::a('shops', ['shop/list']); ?>
+</div>
 <?= $content ?>
 <?php $this->endBody() ?>
 </body>
