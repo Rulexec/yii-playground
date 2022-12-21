@@ -6,6 +6,7 @@ use app\models\Shop;
 use Yii;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class ShopController extends Controller
@@ -36,6 +37,24 @@ class ShopController extends Controller
 
         return $this->asJson([
             'items' => $autocomplete,
+        ]);
+    }
+
+    public function actionView()
+    {
+        $request = Yii::$app->request;
+        $id = intval($request->get('id'));
+
+        $model = $id ? Shop::findOne($id) : null;
+
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+            'books' => $model->getBooks()->all(),
+            'authors' => $model->getAuthors()->all(),
         ]);
     }
 

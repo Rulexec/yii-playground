@@ -101,7 +101,10 @@ class Book extends \yii\db\ActiveRecord
         $command->bindValues($authorValues);
         $command->bindValues($shopValues);
 
-        return $command->execute() > 0;
+        $command->execute();
+
+        // TODO: wrap sql into BEGIN/ROLLBACK?
+        return true;
     }
 
     public function afterDelete()

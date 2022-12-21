@@ -25,6 +25,32 @@ class Shop extends \yii\db\ActiveRecord
         return '';
     }
 
+    public function getBooks()
+    {
+        return $this->hasMany(Book::class, ['id' => 'book_id'])->viaTable('book_shop', ['shop_id' => 'id']);
+    }
+
+    public function getAuthors()
+    {
+        $db = Yii::$app->db;
+
+        $query = <<<SQL
+            SELECT author_id
+            FROM book_author
+            INNER JOIN book_shop
+            ON book_shop.shop_id = :shopId AND book_author.book_id = book_shop.book_id
+        SQL;
+
+        $command = $db->createCommand($query);
+        $command->bindValue('shopId', $this->id);
+
+        // select all shops where this book was present and all authors of this book
+        $result = $command->queryAll();
+        $ids = array_map(fn($row) => $row['author_id'], $result);
+
+        return Author::find()->where(['in', 'id', $ids]);
+    }
+
     public function afterDelete()
     {
         parent::afterDelete();
