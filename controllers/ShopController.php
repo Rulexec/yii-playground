@@ -70,14 +70,37 @@ class ShopController extends Controller
                 $model->save(false);
             }
 
-            return $this->render('create', [
-                'model' => [$request->post(), $success ? 'true' : 'false', $model],
-            ]);
+            return $this->redirect(['shop/edit', 'id' => $model->id], 302);
         }
 
 
         return $this->render('create', [
             'model' => null,
+        ]);
+    }
+
+    public function actionEdit()
+    {
+        $request = Yii::$app->request;
+        $id = intval($request->get('id'));
+        $model = $id ? Shop::findOne($id) : null;
+
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($request->isPost) {
+            $success = $model->load($request->post()) && $model->validate();
+
+            if ($success) {
+                $model->save(false);
+            }
+
+            return $this->redirect(['shop/edit', 'id' => $model->id], 302);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
         ]);
     }
 
