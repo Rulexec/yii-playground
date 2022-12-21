@@ -25,6 +25,11 @@ class Author extends \yii\db\ActiveRecord
         return '';
     }
 
+    public function getBooks()
+    {
+        return $this->hasMany(Book::class, ['id' => 'book_id'])->viaTable('book_author', ['author_id' => 'id']);
+    }
+
     public function afterDelete()
     {
         parent::afterDelete();

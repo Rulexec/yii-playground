@@ -6,6 +6,7 @@ use app\models\Author;
 use Yii;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class AuthorController extends Controller
@@ -18,6 +19,23 @@ class AuthorController extends Controller
 
         return $this->render('list', [
             'items' => $items,
+        ]);
+    }
+
+    public function actionView()
+    {
+        $request = Yii::$app->request;
+        $id = intval($request->get('id'));
+
+        $model = $id ? Author::findOne($id) : null;
+
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+            'books' => $model->getBooks()->all(),
         ]);
     }
 
