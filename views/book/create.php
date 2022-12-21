@@ -106,4 +106,8 @@ if ($selectedShops) {
             <button type="submit"><?= $model ? 'Save' : 'Create' ?></button>
         </div>
     </form>
+    <?php if (isset($errors) && $errors) { ?>
+        <div>Errors:</div>
+        <div><pre><code><?= print_r($errors, true) ?></code></pre></div>
+    <?php } ?>
 </div>
