@@ -7,6 +7,7 @@ use app\models\Book;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\MethodNotAllowedHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -105,6 +106,30 @@ class BookController extends Controller
         return $this->render('create', [
             'model' => null,
         ]);
+    }
+
+    public function actionDelete() {
+        $request = Yii::$app->request;
+
+        if (!$request->isPost) {
+            throw new MethodNotAllowedHttpException();
+        }
+
+        $model = Book::findOne($request->post('id'));
+
+        if ($model) {
+            $model->delete();
+        }
+
+        $retPath = $request->get('retPath');
+
+        if (!$retPath) {
+            // return blank response
+            Yii::$app->response->format = Response::FORMAT_RAW;
+            return;
+        }
+
+        return $this->redirect($retPath, 302);
     }
 
     private static function parseMultiselectIds($str)
