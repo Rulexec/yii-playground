@@ -25,6 +25,23 @@ class Author extends \yii\db\ActiveRecord
         return '';
     }
 
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $db = Yii::$app->db;
+
+        $query = <<<SQL
+            DELETE FROM book_author WHERE author_id = :authorId
+        SQL;
+
+        $command = $db->createCommand($query);
+
+        $command->bindValue('authorId', $this->id);
+
+        $command->execute();
+    }
+
     // COPYPASTE: e594b574
     public static function autocompleteByTitle($pattern)
     {

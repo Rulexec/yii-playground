@@ -25,6 +25,23 @@ class Shop extends \yii\db\ActiveRecord
         return '';
     }
 
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $db = Yii::$app->db;
+
+        $query = <<<SQL
+            DELETE FROM book_shop WHERE shop_id = :shopId
+        SQL;
+
+        $command = $db->createCommand($query);
+
+        $command->bindValue('shopId', $this->id);
+
+        $command->execute();
+    }
+
     // COPYPASTE: e594b574
     public static function autocompleteByTitle($pattern)
     {

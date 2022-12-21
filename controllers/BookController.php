@@ -2,16 +2,11 @@
 
 namespace app\controllers;
 
-use app\models\Author;
 use app\models\Book;
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 
 class BookController extends Controller
 {
@@ -19,11 +14,10 @@ class BookController extends Controller
 
     public function actionList()
     {
-        // $db = Yii::$app->db;
-        $books = Book::find()->all();
+        $items = Book::find()->all();
 
         return $this->render('list', [
-            'books' => $books,
+            'items' => $items,
         ]);
     }
 
@@ -108,6 +102,7 @@ class BookController extends Controller
         ]);
     }
 
+    // COPYPASTE 144eead5
     public function actionDelete() {
         $request = Yii::$app->request;
 
