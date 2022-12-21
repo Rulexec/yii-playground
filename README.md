@@ -1,6 +1,7 @@
 # How to run
 
 ```
+composer update
 php yii migrate/fresh
 php yii serve
 
