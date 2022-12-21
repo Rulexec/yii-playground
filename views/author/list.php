@@ -22,6 +22,7 @@ $currentUrl = Url::current();
     <?php foreach ($items as $item) { ?>
     <div>
         <a href="<?= Html::encode(Url::toRoute(['author/view', 'id' => $item->id])); ?>"><?= $item->title ?></a>
+        <a href="<?= Html::encode(Url::toRoute(['author/edit', 'id' => $item->id])); ?>">edit</a>
         <form method="POST" action="<?= Html::encode(Url::toRoute(['author/delete', 'retPath' => $currentUrl])); ?>"
             style="display: inline-block">
             <?= $csrf ?>
@@ -30,6 +31,7 @@ $currentUrl = Url::current();
         </form>
     </div>
     <?php } ?>
+    <div><?= Html::a('create', ['author/create']); ?></div>
     <?php } else { ?>
     No authors, <?= Html::a('create', ['author/create']); ?>?
     <?php } ?>

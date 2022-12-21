@@ -16,7 +16,7 @@ $this->title = "Author \"{$encodedAuthorName}\"";
 
 ?>
 <div>
-    <div>Author "<?= $encodedAuthorName ?>"</div>
+    <div>Author "<?= $encodedAuthorName ?>" <?= Html::a('edit', ['author/edit', 'id' => $model->id]); ?></div>
 
     <?php if (count($books) > 0) { ?>
         <div>Books:</div>

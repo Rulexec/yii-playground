@@ -17,7 +17,7 @@ $this->title = "Shop \"{$encodedShopName}\"";
 
 ?>
 <div>
-    <div>Shop "<?= $encodedShopName ?>"</div>
+    <div>Shop "<?= $encodedShopName ?>" <?= Html::a('edit', ['shop/edit', 'id' => $model->id]); ?></div>
 
     <?php if (count($books) > 0) { ?>
         <div>Books:</div>
