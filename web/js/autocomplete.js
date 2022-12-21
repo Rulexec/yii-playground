@@ -15,7 +15,13 @@ class AutoComplete {
     this.selectedIds = new Set();
   }
 
-  init() {
+  init({selectedItemsObj}) {
+    if (selectedItemsObj) {
+      selectedItemsObj.forEach(({id, title}) => {
+        this._addItem({label: title, value: id});
+      });
+    }
+
     Autocompleter({
       input: this.element,
       minLength: 1,
@@ -37,6 +43,8 @@ class AutoComplete {
           const mappedItems = [];
 
           items.forEach(({id, title}) => {
+            id = String(id);
+
             if (this.selectedIds.has(id)) {
               // Skip already selected itemss
               return;
@@ -130,12 +138,15 @@ onDomInteractive(() => {
 
     const endpoint = el.getAttribute('data-autocomplete-endpoint');
 
+    const selectedItemsObjName = el.getAttribute('data-autocomplete-obj');
+    const selectedItemsObj = window[selectedItemsObjName];
+
     const autocomplete = new AutoComplete({
       element: el,
       hiddenInputElement: hiddenInputEl,
       selectedItemsDivEl,
       endpoint,
     });
-    autocomplete.init();
+    autocomplete.init({selectedItemsObj});
   }
 });

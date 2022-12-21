@@ -111,13 +111,41 @@ class BookController extends Controller
                 ]);
             }
 
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->redirect(['book/edit', 'id' => $model->id], 302);
         }
 
         return $this->render('create', [
             'model' => null,
+        ]);
+    }
+
+    public function actionEdit()
+    {
+        $request = Yii::$app->request;
+        $id = intval($request->get('id'));
+        $model = $id ? Book::findOne($id) : null;
+
+        if (!$model) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($request->isPost) {
+            $success = $model->load($request->post()) && $model->validate();
+
+            if ($success) {
+                $model->save(false);
+            }
+
+            return $this->redirect(['book/edit', 'id' => $model->id], 302);
+        }
+
+        $selectedAuthors = $model ? $model->getAuthors()->all() : null;
+        $selectedShops = $model ? $model->getShops()->all() : null;
+
+        return $this->render('create', [
+            'model' => $model,
+            'selectedAuthors' => $selectedAuthors,
+            'selectedShops' => $selectedShops,
         ]);
     }
 
